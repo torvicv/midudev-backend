@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class MoviesListController extends Controller
 {
     //
     public function popular() {
-        $client = new Client();
+        $response = Http::withHeaders([
+            'Authorization' => env('TMDB_BEARER_TOKEN', ''),
+            'accept' => 'application/json'
+        ])->get('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1');
 
-        $response = $client->request("GET", 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', [
-            'headers' => [
-                'Authorization' => env('TMDB_BEARER_TOKEN', ''),
-                'accept' => 'application/json'
-            ]
-        ]);
-
-        $result = $response->getBody();
-        return json_encode(json_decode($result)->results);
+        return response()->json(json_decode($response->body())->results);
     }
 
     public function topMovies() {
