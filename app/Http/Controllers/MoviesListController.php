@@ -14,7 +14,11 @@ class MoviesListController extends Controller
             'accept' => 'application/json'
         ])->get('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1');
 
-        return response()->json(json_decode($response->body())->results);
+        $body = json_decode($response->body());
+
+        $results = $body->results;
+
+        return response()->json($results);
     }
 
     public function topMovies() {
@@ -23,7 +27,11 @@ class MoviesListController extends Controller
             'accept' => 'application/json'
         ])->get('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1');
 
-        return response()->json(json_decode($response->body())->results);
+        $body = json_decode($response->body());
+
+        $results = $body->results;
+
+        return response()->json($results);
     }
 
     public function upcoming() {
